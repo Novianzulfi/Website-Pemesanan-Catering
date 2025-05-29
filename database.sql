@@ -3,13 +3,11 @@ CREATE DATABASE IF NOT EXISTS db_catering CHARACTER SET utf8mb4 COLLATE utf8mb4_
 USE db_catering;
 
 -- Tabel users (pemilik & konsumen)
-CREATE TABLE users (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  nama VARCHAR(100),
-  email VARCHAR(100) UNIQUE,
-  password VARCHAR(255),
-  role ENUM('pemilik', 'konsumen') DEFAULT 'konsumen',
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+CREATE TABLE penjual (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100),
+    email VARCHAR(100) UNIQUE,
+    password VARCHAR(255)
 );
 
 -- Tabel menu (upload menu oleh pemilik)
