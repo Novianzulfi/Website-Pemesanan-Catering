@@ -10,17 +10,22 @@ CREATE TABLE penjual (
     password VARCHAR(255)
 );
 
--- Tabel menu (upload menu oleh pemilik)
-CREATE TABLE menu (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  nama_menu VARCHAR(100),
-  deskripsi TEXT,
-  harga DECIMAL(10,2),
-  gambar VARCHAR(255),
-  hari_masuk ENUM('Senin','Selasa','Rabu','Kamis','Jumat','Sabtu','Minggu'),
-  created_by INT,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY (created_by) REFERENCES users(id)
+CREATE TABLE pembeli (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100),
+    email VARCHAR(100) UNIQUE,
+    password VARCHAR(255)
+);
+
+CREATE TABLE menus (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,
+    name VARCHAR(100),
+    description TEXT,
+    price DECIMAL(10,2),
+    image VARCHAR(255),
+    day ENUM('Senin','Selasa','Rabu','Kamis','Jumat','Sabtu','Minggu'),
+    FOREIGN KEY (user_id) REFERENCES penjual(id)
 );
 
 -- Tabel pesanan (catat pesanan konsumen)
@@ -33,7 +38,7 @@ CREATE TABLE pesanan (
   metode_pembayaran VARCHAR(50),
   bukti_pembayaran VARCHAR(255),
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY (id_user) REFERENCES users(id)
+  FOREIGN KEY (id_user) REFERENCES pembeli(id)
 );
 
 -- Tabel pesanan_detail (detail menu per pesanan)
@@ -44,7 +49,7 @@ CREATE TABLE pesanan_detail (
   jumlah INT,
   subtotal DECIMAL(10,2),
   FOREIGN KEY (id_pesanan) REFERENCES pesanan(id),
-  FOREIGN KEY (id_menu) REFERENCES menu(id)
+  FOREIGN KEY (id_menu) REFERENCES menus(id)
 );
 
 -- Tabel jadwal_pengiriman (atur pengiriman pesanan)
@@ -65,7 +70,7 @@ CREATE TABLE notifikasi (
   isi TEXT,
   status ENUM('belum_dibaca','dibaca') DEFAULT 'belum_dibaca',
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY (id_user) REFERENCES users(id)
+  FOREIGN KEY (id_user) REFERENCES penjual(id)
 );
 
 -- Tabel ulasan (penilaian & komentar konsumen)
@@ -76,7 +81,7 @@ CREATE TABLE ulasan (
   rating INT CHECK(rating BETWEEN 1 AND 5),
   komentar TEXT,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY (id_user) REFERENCES users(id),
+  FOREIGN KEY (id_user) REFERENCES pembeli(id),
   FOREIGN KEY (id_pesanan) REFERENCES pesanan(id)
 );
 
@@ -88,5 +93,5 @@ CREATE TABLE keuangan (
   jenis ENUM('pemasukan', 'pengeluaran'),
   jumlah DECIMAL(10,2),
   created_by INT,
-  FOREIGN KEY (created_by) REFERENCES users(id)
+  FOREIGN KEY (created_by) REFERENCES penjual(id)
 );
